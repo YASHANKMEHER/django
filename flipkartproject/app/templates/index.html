@@ -1,24 +1,55 @@
 {% extends 'base.html' %} {% load static %}
 <title>{% block title %}FlipKart|Index{% endblock %}</title>
+
 <body>
   {% block body %}
   <div class="container-fluid">
-    <div class="row">
+    <div class=" row">
+      <div class="container">
+        <div class=" row">
+          <div class="col">
+            <a href="/electronicslist">
+              <img src="{% static 'images/appliances.png' %}" alt=""><br>
+              Appliances
+            </a>
+          </div>
+          <div class="col">
+            <a href="/clothlistt">
+              <img src="{% static 'images/fashion.png' %}" alt=""><br>
+              Clothes
+            </a>
+          </div>
+          <div class="col">
+            <a href="/mobilelist">
+              <img src="{% static 'images/kitchen.png' %}" alt=""><br>
+              Mobile phones
+            </a>
+          </div>
+          <div class="col">
+            <a href="/shoeslist">
+              <img src="{% static 'images/newlogo.png' %}" alt=""><br>
+              Sports Shoes
+            </a>
+          </div>
+
+        </div>
+      </div>
       <div class="col-2">
 
         <div>
-        <h5><i>Search by category</i></h5>
-        <hr>
-        <a href="#">By Mobile</a><br>
-        <a href="#">By Electronics</a><br>
-        <a href="#">By clothes</a><br>
-        <a href="#">By Shoes</a>
+          <h5><i>Search by category</i></h5>
+          <hr>
+          <a href="/mobilelist">By Mobile</a><br>
+          <a href="/electronicslist">By Electronics</a><br>
+          <a href="/clothlist">By clothes</a><br>
+          <a href="/shoeslist">By Shoes</a>
         </div>
 
         <div>
           <h5><i>Search by Price Range</i></h5>
           <hr>
-          <form action="#" method="post">
+          <form action="/showpricerange/" method="post">
+            {% csrf_token %}
             <input type="number" placeholder="Min Price" name="min"><br>
             <input type="number" placeholder="Max Price" name="max"><br>
             <input type="submit" value="submit">
@@ -28,15 +59,15 @@
         <div class="mt-3">
           <h5>Sort by Price</h5>
           <hr>
-          <a href="#">Low to High</a>
-          <a href="#">High to Low</a>
+          <a href="/sortingbyprice/?sort=low_to_high">Low to High</a><br>
+          <a href="/sortingbyprice/?sort=high_to_low">High to Low</a>
         </div>
 
       </div>
 
       <div class="col-10">
         <!-- corousel start here -->
-         <div class="container">
+        <div class="container">
           <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
               <div class="carousel-item active" data-bs-interval="5000">
@@ -49,21 +80,26 @@
                 <img src="{% static 'images/banner2.png' %}" class="d-block w-100" alt="..." width="230px">
               </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"
+              data-bs-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
+              data-bs-slide="next">
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
             </button>
           </div>
-         </div>
+        </div>
         <!-- corousel end here -->
 
         <!-- cards starts here -->
-         <div class="container" mt-3>
+        <div class="container" mt-3>
           <div class="row">
+            {% for m in messages %}
+            <i><mark>{{m}}</mark></i>
+            {% endfor %}
 
             {% for x in allproducts %}
             <div class="col-md-4">
@@ -71,15 +107,16 @@
                 <img src="{{x.images.url}}" class="card-img-top" alt="{{x.productname}}" style="width:230px;">
                 <div class="card-body">
                   <h5 class="card-title">{{x.productname}}>
-                  <p class="card-text">{{x.description}}</p>
-                  <a href="#" class="btn btn-primary">Add to Cart</a>
-                  <a href="#" class="btn btn-secondary">Buy now</a>
+                    <p class="card-text">{{x.description}}</p>
+                    <p class="card-text">{{x.price}}</p>
+                    <a href="#" class="btn btn-primary">Add to Cart</a>
+                    <a href="#" class="btn btn-secondary">Buy now</a>
                 </div>
               </div>
             </div>
             {% endfor %}
           </div>
-         </div>
+        </div>
         <!-- cards ends here -->
       </div>
     </div>
