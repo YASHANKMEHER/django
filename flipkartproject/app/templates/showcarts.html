@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %} Flipkart | Carts {% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Cart section starts here -->
+        <div class="col-md-10">
+            <div class="row">
+                {% for x in allcarts %}
+                <div class="col-md-4 mt-3" style="background-color: rgb(247, 224, 227); border: 0.2px solid rgb(239, 148, 148);">
+                    <img src="{{x.productid.images.url}}" alt="{{x.productid.productname}}" width="300px">
+                </div>
+                
+                <div class="col-md-8 mt-3">
+                    <div class="card">
+                        <div class="card-header fw-bold">
+                            Product Details
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{x.productid.productname}}</h5>
+                            <p class="card-text text-success fw-bold"> Special Price</p>
+                            <p class="card-text">
+                                <strong>{{x.productid.price}}</strong>&nbsp;
+                                <del>{{x.productid.price|add:x.productid.price}}/-</del>
+                                <span class="text-success">50% off</span>
+                            </p>
+                            <p class="card-text">{{x.productid.description}}</p>
+                            <p class="card-text fw-bold">Available Offers</p>
+                            <ul>
+                                <li>Bank Offer: 5% Unlimited Cashback on Flipkart Axis Bank Credit Card T&C</li>
+                                <li>Bank Offer: 10% off up to ₹1,200 on HDFC Bank Credit Card EMI on 6 and 9 months tenure. Min Txn Value: ₹5000 T&C</li>
+                                <li>Bank Offer: 5% Unlimited Cashback on Flipkart Axis Bank Credit Card T&C</li>
+                            </ul>
+                            <p class="card-text">Deliver by {{date}} | <span class="card-text">Free</span></p>
+                            <p class="card-text">10 Days Return Policy</p>
+
+                            <strong>QTY:</strong>
+                            <a href="#"><button class="btn btn-danger">-</button></a>
+                            <input type="number" value="{{x.qty}}" style="width: 100px;">
+                            <a href="#"><button class="btn btn-success">+</button></a>
+                            
+                            <p>
+                                <a class="btn btn-warning mt-3" href="#">Make Payment</a>
+                                <a class="btn btn-primary mt-3" href="#">Remove Cart</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Cart section ends here -->
+
+        <!-- Total amount section starts here -->
+        <div class="col-md-2 mt-3">
+            <div class="card">
+                <div class="card-header text-center bg-danger text-white">
+                    <h3>Total Amount</h3>
+                </div>
+                <div class="card-body">
+                    <h5><strong>Total items:</strong></h5>
+                    <hr>
+                    <h5><strong>Total Amount: ₹<span id="total-amount">0</span></strong></h5>
+                    <hr>
+                    <a href="#" class="btn btn-danger btn-block">Make Payment</a>
+                </div>
+            </div>
+        </div>
+        <!-- Total amount section ends here -->
+
+    </div>
+</div>
+{% endblock %}
