@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
-from .models import Product,Cart,Orders
+from .models import Product,Cart,Orders,Address ,Payment
 
 def index(req):
     allproducts = Product.objects.all()
@@ -313,6 +313,88 @@ def addtocart(req,productid):
     if not created:
         cartitem.qty += 1
     else:
-        cartitem.gty = 1
+        cartitem.qty = 1
     cartitem.save()
     return redirect("/showcarts")
+
+
+def removecart(req,productid):
+    if req.user.is_authenticated:
+        userid = req.user
+    else:
+        userid = None
+
+    cartitems = Cart.objects.get(productid=productid,userid=userid)
+    cartitems.delete()
+    return redirect("/showcarts")
+
+# def updateqty(req,qv,productid):
+#     allcarts = Product.objects.filter(productid=productid)
+#     if qv == 1:
+#         total = allcarts[0].qty+1
+#         allcarts.update(qty=total)
+#     else:
+#         if allcarts[0].qty>1:
+#             total = allcarts[0].qty+1
+#             allcarts.update(qty=total)
+#         else:
+#             allcarts = Carts.objects.filter(productid=productid)
+#             allcarts.delete()
+#     return redirect("/showcarts")
+
+
+from django.shortcuts import redirect
+
+def updateqty(req, qv, productid):
+    allcarts = Product.objects.filter(productid=productid)
+    
+    # Check if there are any carts for the product
+    if allcarts.exists():  # Ensures there is at least one product in the cart
+        product = allcarts[0]  # Get the first matching product (assuming one per cart)
+
+        if qv == 1:
+            # Increment the quantity by 1
+            product.qty += 1
+            product.save()  # Save the updated quantity
+        else:
+            if product.qty > 1:
+                # Decrement the quantity by 1
+                product.qty -= 1
+                product.save()  # Save the updated quantity
+            else:
+                # If quantity is 1, delete the cart entry
+                allcarts.delete()  # Deletes the product from the cart
+
+    return redirect("/showcarts")  # Redirect to the show carts page
+
+from .forms import AddressForm
+
+def addaddress(req):
+    if req.user.is_authenticated:
+        if req.method == "POST":
+            form = AddressForm(req.POST)            
+            if form.is_valid():
+                address = form.save(commit = False)
+                address.userid = req.user
+                address.save()
+                return redirect('/showcarts')
+
+        else:
+            form = AddressForm()
+
+        context = {"form":form}
+        return render(req,"addaddress.html",context)
+    else:
+        return redirect('/signin')
+    
+
+def showaddress(req):
+    if req.user.is_authenticated:
+        address = Address.objects.filter(userid=req.user)
+        if req.method == "POST":
+            return redirect("/showcarts")
+        
+        context = {"address":address}
+        return render(req,"addaddress.html",context)
+    else:
+        return redirect("/signin")

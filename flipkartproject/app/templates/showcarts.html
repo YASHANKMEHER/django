@@ -37,13 +37,13 @@
                             <p class="card-text">10 Days Return Policy</p>
 
                             <strong>QTY:</strong>
-                            <a href="#"><button class="btn btn-danger">-</button></a>
+                            <a href="/updateqty/0/{{x.productid.productid}}"><button class="btn btn-danger">-</button></a>
                             <input type="number" value="{{x.qty}}" style="width: 100px;">
-                            <a href="#"><button class="btn btn-success">+</button></a>
+                            <a href="/updateqty/1/{{x.productid.productid}}"><button class="btn btn-success">+</button></a>
                             
                             <p>
-                                <a class="btn btn-warning mt-3" href="#">Make Payment</a>
-                                <a class="btn btn-primary mt-3" href="#">Remove Cart</a>
+                                <a class="btn btn-warning mt-3" href="/addaddress">Make Payment</a>
+                                <a class="btn btn-primary mt-3" href="/removecart/{{x.productid.productid}}">Remove from Cart</a>
                             </p>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                     <hr>
                     <h5><strong>Total Amount: ₹<span id="total-amount">0</span></strong></h5>
                     <hr>
-                    <a href="#" class="btn btn-danger btn-block">Make Payment</a>
+                    <a href="/addaddress" class="btn btn-danger btn-block">Make Payment</a>
                 </div>
             </div>
         </div>
